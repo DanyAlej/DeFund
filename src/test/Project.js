@@ -1,5 +1,5 @@
 const { expect } = require("chai");
-const Web3 = require('web3');
+// I can use web 3 by simply accessing web3.   hardhat makes an instance available
 
 describe('Project contract', function () {
 
@@ -33,10 +33,10 @@ describe('Project contract', function () {
 
     describe("Donations", function () {
         it("Should transfer tokens to the smart contract", async function () {
-            await hardhatProject.connect(donor1).donate.value(100);
+            await hardhatProject.connect(donor1).donate({from: donor1.getAddress(), value: 900});
             donorBalance = await donor1.getBalance();
-            console.log("tester %s", donorBalance);
-            expect(await hardhatProject.totalDonated()).to.equal(100);
+            expect(await hardhatProject.totalDonated()).to.equal(900);
+            expect(await hardhatProject.getNumberOfDonors()).to.equal(1); 
         });
 
         it("Project should start with 0 in donations", async function () {

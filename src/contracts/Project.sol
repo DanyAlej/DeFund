@@ -38,7 +38,6 @@ contract Project {
         // Transfer the amount.
         donations[msg.sender] += msg.value;
         donators.push(msg.sender);
-        console.log("numero de donadores %s", donators.length);
 
         currentAmount += msg.value;
 
@@ -49,6 +48,7 @@ contract Project {
     }
 
     function getNumberOfDonors() external view returns (uint256) {
+        console.log(donators.length);
         return donators.length;
     }
 }
