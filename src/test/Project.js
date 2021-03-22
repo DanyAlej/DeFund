@@ -1,4 +1,5 @@
 const { expect } = require("chai");
+const Web3 = require('web3');
 
 describe('Project contract', function () {
 
@@ -16,7 +17,7 @@ describe('Project contract', function () {
         Project = await ethers.getContractFactory("Project");
         [charity, donor1, donor2, ...donors] = await ethers.getSigners();
 
-        hardhatProject = await Project.deploy();
+        hardhatProject = await Project.deploy(charity.getAddress());
     });
 
 
@@ -32,8 +33,10 @@ describe('Project contract', function () {
 
     describe("Donations", function () {
         it("Should transfer tokens to the smart contract", async function () {
-            await hardhatProject.connect(donor1).donate(50);
-            expect(await hardhatProject.totalDonated()).to.equal(50);
+            await hardhatProject.connect(donor1).donate.value(100);
+            donorBalance = await donor1.getBalance();
+            console.log("tester %s", donorBalance);
+            expect(await hardhatProject.totalDonated()).to.equal(100);
         });
 
         it("Project should start with 0 in donations", async function () {

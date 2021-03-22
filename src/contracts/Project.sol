@@ -28,8 +28,7 @@ contract Project {
 
     }
 
-    function donate(uint256 amount) payable external {
-        console.log("amount %s", amount);
+    function donate() payable external {
         console.log("amount %s", msg.value);
         console.log("sender address  %s", msg.sender);
        // console.log("state %s vs %s", state, State.Started);
