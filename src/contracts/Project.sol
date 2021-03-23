@@ -10,30 +10,40 @@ contract Project {
     //How much the project want's to raise
     uint public goal;
 
-    address payable public charityAdress;
+    address payable public charityAddress;
 
     mapping (address => uint) public donations;
     address[] public donators;
 
+    mapping (address => bool) public approvals;
+    uint public numberOfApprovals;
+
     uint public currentAmount;
 
-    enum State { Created, Started, Funded, Inactive }
+    bool public isFunded;
 
-    State public state;
+    modifier onlyDonor() {
+        bool isDonor = false; 
+        for(uint i = 0; i < donators.length && !isDonor; i++) {
+            if (msg.sender == donators[i]) {
+                isDonor = true;
+            }
+        }
+        require(isDonor, "Only donors can call this method");
+        _;
+    }
 
-    constructor() {
+    constructor(uint _goal) {
 
-        charityAdress = msg.sender;
-        state = State.Started;
+        charityAddress = msg.sender;
+        isFunded = false;
+        goal = _goal;
 
     }
 
     function donate() payable external {
-        console.log("amount %s", msg.value);
-        console.log("sender address  %s", msg.sender);
-       // console.log("state %s vs %s", state, State.Started);
         require(msg.value >= 0, "Not enough tokens");
-        require(state == State.Started, "Project not started or already funded");
+        require(isFunded != true, "Project is already funded");
 
         // Transfer the amount.
         donations[msg.sender] += msg.value;
@@ -48,8 +58,26 @@ contract Project {
     }
 
     function getNumberOfDonors() external view returns (uint256) {
-        console.log(donators.length);
         return donators.length;
+    }
+
+    function balanceOfProject() view public returns (uint256) {
+        return address(this).balance;
+    }
+
+    function approve() public onlyDonor {
+        approvals[msg.sender] = true;
+        numberOfApprovals += 1;
+
+        //once the project has achieved the goal AND  everyone has approved funds will be released to the charity
+        if(currentAmount >= goal && numberOfApprovals == donators.length) {
+            releaseFunds();
+        }
+    }
+
+    function releaseFunds() private {
+        charityAddress.transfer(currentAmount);
+        isFunded = true;
     }
 }
 
