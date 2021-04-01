@@ -1,4 +1,6 @@
 const { expect } = require("chai");
+var utils = require('ethers').utils;
+
 require("@nomiclabs/hardhat-web3");
 // I can use web 3 by simply accessing web3.   hardhat makes an instance available
 
@@ -79,6 +81,60 @@ describe('Project contract', function () {
             //expect(await hardhatProject.connect(charity).approve()).to.throw("Only donors can call this method");
 
         });
+
+        it("All the donations are approved but hasn't hit the target", async function () {
+            expect(await hardhatProject.totalDonated()).to.equal(0);
+            await hardhatProject.connect(donor1).donate({from: donor1.getAddress(), value: 900});
+            await hardhatProject.connect(donor2).donate({from: donor2.getAddress(), value: 500});
+
+            //donor 2 is going to approve the release of funds and donor 1 isn't
+            await hardhatProject.connect(donor1).approve();
+            let charityBalanceBefore = await charity.getBalance();
+            await hardhatProject.connect(donor2).approve();
+
+            expect(await hardhatProject.numberOfApprovals()).to.equal(2);
+            let charityBalanceAfter = await charity.getBalance();
+
+            console.log(charityBalanceBefore.eq(charityBalanceAfter));
+            expect((charityBalanceAfter.sub(charityBalanceBefore)).toNumber()).to.equal(0);
+
+        });
+
+        it("Donor approves more than once", async function () {
+            expect(await hardhatProject.totalDonated()).to.equal(0);
+            await hardhatProject.connect(donor1).donate({from: donor1.getAddress(), value: 900});
+            await hardhatProject.connect(donor2).donate({from: donor2.getAddress(), value: 500});
+
+            //donor 2 is going to approve the release of funds and donor 1 isn't
+            await hardhatProject.connect(donor1).approve();
+            await hardhatProject.connect(donor2).approve();
+            await hardhatProject.connect(donor2).approve();
+
+            expect(await hardhatProject.numberOfApprovals()).to.equal(2);
+        });
+
+
+        it("Gets to target and releases funds", async function () {
+            expect(await hardhatProject.totalDonated()).to.equal(0);
+            await hardhatProject.connect(donor1).donate({from: donor1.getAddress(), value: 1900});
+            await hardhatProject.connect(donor2).donate({from: donor2.getAddress(), value: 500});
+
+            //donor 2 is going to approve the release of funds and donor 1 isn't
+            await hardhatProject.connect(donor1).approve();
+            let charityBalanceBefore = await charity.getBalance();
+            console.log(charityBalanceBefore);
+            await hardhatProject.connect(donor2).approve();
+
+            expect(await hardhatProject.numberOfApprovals()).to.equal(2);
+            let charityBalanceAfter = await charity.getBalance();
+            console.log(charityBalanceAfter);
+
+
+            console.log(charityBalanceBefore.eq(charityBalanceAfter));
+            expect((charityBalanceAfter.sub(charityBalanceBefore)).toNumber()).to.equal(2400);
+        });
+
+
 
     });
 });

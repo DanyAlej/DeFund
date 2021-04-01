@@ -66,11 +66,16 @@ contract Project {
     }
 
     function approve() public onlyDonor {
-        approvals[msg.sender] = true;
-        numberOfApprovals += 1;
+        //donor only approves once, only approves the project
+        if(!approvals[msg.sender]){
+            approvals[msg.sender] = true;
+            numberOfApprovals += 1;
+        }
 
+        console.log("Approved, release?");
         //once the project has achieved the goal AND  everyone has approved funds will be released to the charity
         if(currentAmount >= goal && numberOfApprovals == donators.length) {
+            console.log("Releasing funds conditions met");
             releaseFunds();
         }
     }
@@ -80,4 +85,3 @@ contract Project {
         isFunded = true;
     }
 }
-
