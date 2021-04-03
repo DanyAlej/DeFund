@@ -1,4 +1,50 @@
+# generic folders
+build/
+coverage/
+dist/
 node_modules/
+
+# generic files
+.DS_Store
+.env*
+.pnp*
+npm-debug.log*
+tsconfig.tsbuildinfo
+yarn.lock
+yarn-debug.log*
+yarn-error.log*
+*.log
+!/yarn.lock
+
+# templates
+templates/**/build/
+templates/**/src/types/
+
 package-lock.json
 artifacts
 cache
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+./src/defund-react/node_modules
+./src/defund-react/.pnp
+./src/defund-react.pnp.js
+
+# testing
+./src/defund-react/coverage
+
+# production
+./src/defund-react/build
+
+# misc
+./src/defund-react/.DS_Store
+./src/defund-react/.env.local
+./src/defund-react/.env.development.local
+./src/defund-react/.env.test.local
+./src/defund-react/.env.production.local
+
+./src/defund-react/npm-debug.log*
+./src/defund-react/yarn-debug.log*
+./src/defund-react/yarn-error.log*
+
