@@ -48,3 +48,6 @@ cache
 ./src/defund-react/yarn-debug.log*
 ./src/defund-react/yarn-error.log*
 
+#hardhat react
+frontend/src/hardhat/deployments/hardhat
+frontend/src/hardhat/deployments/localhost

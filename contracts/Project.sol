@@ -33,8 +33,10 @@ contract Project {
         _;
     }
 
-    constructor(uint _goal) {
+    constructor(uint _goal, string memory _charityName, string memory _description) {
 
+        charityName = _charityName;
+        description = _description;
         charityAddress = msg.sender;
         isFunded = false;
         goal = _goal;

@@ -20,7 +20,7 @@ describe('Project contract', function () {
         Project = await ethers.getContractFactory("Project");
         [charity, donor1, donor2, ...donors] = await ethers.getSigners();
 
-        hardhatProject = await Project.deploy(2000, charity.getAddress());
+        hardhatProject = await Project.deploy(2000, "La caridad", "ayudamos a niños neceistados", charity.getAddress());
     });
 
 
