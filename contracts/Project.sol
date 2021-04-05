@@ -43,6 +43,12 @@ contract Project {
 
     }
 
+    function setProject(uint _goal, string memory _charityName, string memory _description) public {
+        goal = _goal;
+        charityName = _charityName;
+        description = _description;
+    }
+
     function donate() payable external {
         require(msg.value >= 0, "Not enough tokens");
         require(isFunded != true, "Project is already funded");

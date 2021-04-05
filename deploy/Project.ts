@@ -11,6 +11,6 @@ module.exports = async ({
   await deploy("Project", {
     from: deployer,
     // gas: 4000000,
-    args: [0, "", ""],
+    args: [3400, "Dany's foundation", "We help kids in thirld world countries get access to science and technology education"],
   });
 };

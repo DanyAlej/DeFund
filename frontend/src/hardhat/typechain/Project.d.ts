@@ -36,6 +36,7 @@ interface ProjectInterface extends ethers.utils.Interface {
     "goal()": FunctionFragment;
     "isFunded()": FunctionFragment;
     "numberOfApprovals()": FunctionFragment;
+    "setProject(uint256,string,string)": FunctionFragment;
     "totalDonated()": FunctionFragment;
   };
 
@@ -78,6 +79,10 @@ interface ProjectInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "setProject",
+    values: [BigNumberish, string, string]
+  ): string;
+  encodeFunctionData(
     functionFragment: "totalDonated",
     values?: undefined
   ): string;
@@ -117,6 +122,7 @@ interface ProjectInterface extends ethers.utils.Interface {
     functionFragment: "numberOfApprovals",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setProject", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalDonated",
     data: BytesLike
@@ -242,6 +248,20 @@ export class Project extends Contract {
 
     "numberOfApprovals()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    setProject(
+      _goal: BigNumberish,
+      _charityName: string,
+      _description: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "setProject(uint256,string,string)"(
+      _goal: BigNumberish,
+      _charityName: string,
+      _description: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     totalDonated(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     "totalDonated()"(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -320,6 +340,20 @@ export class Project extends Contract {
 
   "numberOfApprovals()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+  setProject(
+    _goal: BigNumberish,
+    _charityName: string,
+    _description: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "setProject(uint256,string,string)"(
+    _goal: BigNumberish,
+    _charityName: string,
+    _description: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   totalDonated(overrides?: CallOverrides): Promise<BigNumber>;
 
   "totalDonated()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -389,6 +423,20 @@ export class Project extends Contract {
     numberOfApprovals(overrides?: CallOverrides): Promise<BigNumber>;
 
     "numberOfApprovals()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    setProject(
+      _goal: BigNumberish,
+      _charityName: string,
+      _description: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setProject(uint256,string,string)"(
+      _goal: BigNumberish,
+      _charityName: string,
+      _description: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     totalDonated(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -470,6 +518,20 @@ export class Project extends Contract {
     numberOfApprovals(overrides?: CallOverrides): Promise<BigNumber>;
 
     "numberOfApprovals()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    setProject(
+      _goal: BigNumberish,
+      _charityName: string,
+      _description: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "setProject(uint256,string,string)"(
+      _goal: BigNumberish,
+      _charityName: string,
+      _description: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     totalDonated(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -565,6 +627,20 @@ export class Project extends Contract {
 
     "numberOfApprovals()"(
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    setProject(
+      _goal: BigNumberish,
+      _charityName: string,
+      _description: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "setProject(uint256,string,string)"(
+      _goal: BigNumberish,
+      _charityName: string,
+      _description: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     totalDonated(overrides?: CallOverrides): Promise<PopulatedTransaction>;

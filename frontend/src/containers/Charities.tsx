@@ -1,15 +1,17 @@
 //import { HardhatRuntimeEnvironment } from "hardhat/types";
 //import { DeployFunction } from "hardhat-deploy/types";
 import React, { useState, useEffect, useContext } from 'react';
-import { Symfoni, ProjectContext, ProviderContext } from "./../hardhat/SymfoniContext";
+import {Project} from '../hardhat/typechain/Project';
+import { ProjectContext } from "./../hardhat/SymfoniContext";
 
 function Charities() {
     const project = useContext(ProjectContext);
-    const [provider, setProvider] = useContext(ProviderContext);
+    //const [provider, setProvider] = useContext(ProviderContext);
 
     const [charityName, setCharityName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
     const [goal, setGoal] = useState(0);
+    const [newProject, setNewProject] = useState<Project>();
 
     //const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         //console.log('Form submitted');
@@ -31,11 +33,21 @@ function Charities() {
     //}
 
     const handleCreateProject = () => {
-        console.log("Creating project... ");
-        console.log(project.factory);
-        project.factory?.deploy(0,"","");
-        project.instance?.attach("0x5fbdb2315678afecb367f032d93f642f64180aa3");
-        console.log(project.instance);
+        const doAsync = async () => {
+            //if(!project.factory) throw Error("Factory instance not ready");
+            //console.log(goal);
+            //console.log(charityName);
+            //console.log(projectDescription);
+            //setNewProject(await project.factory.deploy(goal, charityName, projectDescription));
+            //console.log(typeof(newProject?.address));
+            //if(!newProject || !project.instance) return
+            //project.instance.attach(newProject.address);
+            //console.log(project.instance.address);
+            if(!project.instance) return
+            let tx = await project.instance.setProject(goal, charityName, projectDescription)
+            await tx.wait();
+        };
+        doAsync();
     }
 
     useEffect(() => {
@@ -44,7 +56,7 @@ function Charities() {
                 console.log("Project hasn't been deployed")
             } else {
                 console.log("project is already deployed at ", project.instance.address)
-            //setMessage(await greeter.instance.greet())
+                console.log(charityName);
             }
 
         };
@@ -53,7 +65,6 @@ function Charities() {
 
 
     return (
-        <Symfoni autoInit={true}>
             <div>
                 <h1> Follow the next steps to create the project you want to fund </h1>
                 <input type="text" name="charityName" value={charityName} onChange={(e) => setCharityName(e.target.value)}></input>
@@ -61,7 +72,6 @@ function Charities() {
                 <input type="number" name="goal" value={goal} onChange={(e) => setGoal(parseInt(e.target.value))}></input>
                 <button onClick={handleCreateProject}>Create project!</button>
             </div>
-        </Symfoni>
     );
 }
 
