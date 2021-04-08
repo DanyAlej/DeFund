@@ -1,8 +1,8 @@
 //import { HardhatRuntimeEnvironment } from "hardhat/types";
 //import { DeployFunction } from "hardhat-deploy/types";
 import React, { useState, useEffect, useContext } from 'react';
-import {Project} from '../hardhat/typechain/Project';
 import { ProjectContext } from "./../hardhat/SymfoniContext";
+import {BigNumber} from '@ethersproject/bignumber';
 
 function Charities() {
     const project = useContext(ProjectContext);
@@ -10,8 +10,8 @@ function Charities() {
 
     const [charityName, setCharityName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
-    const [goal, setGoal] = useState(0);
-    const [newProject, setNewProject] = useState<Project>();
+    const [goal, setGoal] = useState<BigNumber>(BigNumber.from(0));
+    const oneEth = BigNumber.from("1000000000000000000");
 
     //const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
         //console.log('Form submitted');
@@ -56,7 +56,6 @@ function Charities() {
                 console.log("Project hasn't been deployed")
             } else {
                 console.log("project is already deployed at ", project.instance.address)
-                console.log(charityName);
             }
 
         };
@@ -69,7 +68,7 @@ function Charities() {
                 <h1> Follow the next steps to create the project you want to fund </h1>
                 <input type="text" name="charityName" value={charityName} onChange={(e) => setCharityName(e.target.value)}></input>
                 <input type="text" name="projectDescription" value={projectDescription} onChange={(e) => setProjectDescription(e.target.value)}></input>
-                <input type="number" name="goal" value={goal} onChange={(e) => setGoal(parseInt(e.target.value))}></input>
+                <input type="number" name="goal" onChange={(e) => setGoal(BigNumber.from(parseInt(e.target.value)).mul(oneEth))}></input>
                 <button onClick={handleCreateProject}>Create project!</button>
             </div>
     );

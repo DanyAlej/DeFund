@@ -9,13 +9,16 @@ function Donors() {
     const project = useContext(ProjectContext);
     //const [provider, setProvider] = useContext(ProviderContext);
     const [signer, setSigner] = useContext(SignerContext);
-    const bigNumberToEth = BigNumber.from("1000000000000000000");
+    const oneEth = BigNumber.from("1000000000000000000");
  
     const [charityName, setCharityName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
     const [goal, setGoal] = useState<BigNumber>(BigNumber.from('0'));
     const [currentDonatedTotal, setCurrentDonatedTotal] = useState<BigNumber>(BigNumber.from('0'));
+    const [numberOfApprovals, setNumberOfApprovals] = useState(0);
+    const [numberOfDonors, setNumberOfDonors] = useState(0);
     const [donation, setDonation] = useState(0);
+    const [donors, setDonors] = useState<String[]>([]);
 
     useEffect(() => {
         const doAsync = async () => {
@@ -23,10 +26,19 @@ function Donors() {
                 console.log("Project hasn't been deployed")
             } else {
                 console.log("project is already deployed at ", project.instance.address)
-                setCharityName(await project.instance.charityName());
+                console.log(await project.instance.donators(0))
                 setGoal(await project.instance.goal());
                 setProjectDescription(await project.instance.description());
-                setCurrentDonatedTotal((await project.instance.totalDonated()).div(bigNumberToEth));
+                setCurrentDonatedTotal((await project.instance.totalDonated()).div(oneEth));
+                setCharityName(await project.instance.charityName());
+                setNumberOfApprovals((await project.instance.numberOfApprovals()).toNumber());
+                setNumberOfDonors((await project.instance.getNumberOfDonors()).toNumber());
+                let newDonor;
+                let i;
+                for(i=0; i < numberOfDonors; i++) {
+                    newDonor = await project.instance.donators(i);
+                    setDonors([...donors, newDonor]);
+                }
             }
         };
         doAsync();
@@ -38,7 +50,7 @@ function Donors() {
             if(!project.instance) return
             const signerAddress = await signer?.getAddress();
             console.log(signerAddress);
-            const tempDonation = BigNumber.from(donation).mul(bigNumberToEth);
+            const tempDonation = BigNumber.from(donation).mul(oneEth);
             project.instance.donate({from: signerAddress, value: tempDonation});
         }
         doAsync();
@@ -46,15 +58,27 @@ function Donors() {
 
     function approve() {
         console.log("Approval");
+        const doAsync = async () => {
+            if(!project.instance) return
+                project.instance.approve();
+            }
+            doAsync();
     }
+
+    const donorList = donors.map((donor, key) => 
+        <p key={key}> Donor address: {donor} </p>
+        )
 
     return (
         <div>
             <p>Project address: {project.instance?.address}</p>
-            <p>Project goal: {goal.toNumber()}</p>
+            <p>Project goal: {(goal.div(oneEth)).toNumber()} ETH</p>
             <p>Project's Charity: {charityName}</p>
             <p>Project description: {projectDescription}</p>
-            <p>Doantions until now: {currentDonatedTotal.toNumber()} ETH</p>
+            <p>Donations until now: {currentDonatedTotal.toNumber()} ETH</p>
+            <p>Approvals until now: {numberOfApprovals}</p>
+            <p>Number of donors until now: {numberOfDonors}</p>
+            {donorList}
             <input onChange={(e) => setDonation(parseInt(e.target.value))}></input>
             <br />
             <button onClick={donate}> Donate! </button>
