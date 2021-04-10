@@ -10,7 +10,7 @@ function Charities() {
 
     const [charityName, setCharityName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
-    const [goal, setGoal] = useState<BigNumber>(BigNumber.from(0));
+    const [goal, setGoal] = useState(0);
     const oneEth = BigNumber.from("1000000000000000000");
 
     //const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
@@ -44,7 +44,8 @@ function Charities() {
             //project.instance.attach(newProject.address);
             //console.log(project.instance.address);
             if(!project.instance) return
-            let tx = await project.instance.setProject(goal, charityName, projectDescription)
+            let tx = await project.instance.setProject((BigNumber.from(goal).mul(oneEth)), charityName, projectDescription)
+            //let tx = await project.instance.setProject(2000, charityName, projectDescription)
             await tx.wait();
         };
         doAsync();
@@ -68,7 +69,7 @@ function Charities() {
                 <h1> Follow the next steps to create the project you want to fund </h1>
                 <input type="text" name="charityName" value={charityName} onChange={(e) => setCharityName(e.target.value)}></input>
                 <input type="text" name="projectDescription" value={projectDescription} onChange={(e) => setProjectDescription(e.target.value)}></input>
-                <input type="number" name="goal" onChange={(e) => setGoal(BigNumber.from(parseInt(e.target.value)).mul(oneEth))}></input>
+                <input type="number" name="goal" onChange={(e) => setGoal(parseInt(e.target.value))}></input>
                 <button onClick={handleCreateProject}>Create project!</button>
             </div>
     );

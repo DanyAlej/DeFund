@@ -51,6 +51,7 @@ contract Project {
 
     function donate() payable external {
         require(msg.value >= 0, "Not enough tokens");
+        require(msg.sender != charityAddress, "The charity can't donate to it's own project");
         require(isFunded != true, "Project is already funded");
 
         // Transfer the amount.

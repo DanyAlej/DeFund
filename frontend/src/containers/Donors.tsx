@@ -19,6 +19,7 @@ function Donors() {
     const [numberOfDonors, setNumberOfDonors] = useState(0);
     const [donation, setDonation] = useState(0);
     const [donors, setDonors] = useState<String[]>([]);
+    const [isFunded, setIsFunded] = useState<Boolean>(false);
 
     useEffect(() => {
         const doAsync = async () => {
@@ -26,23 +27,31 @@ function Donors() {
                 console.log("Project hasn't been deployed")
             } else {
                 console.log("project is already deployed at ", project.instance.address)
-                console.log(await project.instance.donators(0))
-                setGoal(await project.instance.goal());
+                setGoal((await project.instance.goal()).div(oneEth));
                 setProjectDescription(await project.instance.description());
-                setCurrentDonatedTotal((await project.instance.totalDonated()).div(oneEth));
+                let totalDonatedNow = await project.instance.totalDonated();
+                if (totalDonatedNow.eq(BigNumber.from(0))) {
+                    setCurrentDonatedTotal(BigNumber.from(0));
+                }
+                else {
+                    setCurrentDonatedTotal((await project.instance.totalDonated()).div(oneEth));
+                }
                 setCharityName(await project.instance.charityName());
                 setNumberOfApprovals((await project.instance.numberOfApprovals()).toNumber());
                 setNumberOfDonors((await project.instance.getNumberOfDonors()).toNumber());
+                setIsFunded(await project.instance.isFunded());
+                console.log(await project.instance.balanceOfProject());
                 let newDonor;
                 let i;
                 for(i=0; i < numberOfDonors; i++) {
                     newDonor = await project.instance.donators(i);
+                    console.log(newDonor);
                     setDonors([...donors, newDonor]);
                 }
             }
         };
         doAsync();
-    }, [project])
+    }, [project, numberOfDonors])
 
     function donate() {
         console.log("Donation");
@@ -71,8 +80,9 @@ function Donors() {
 
     return (
         <div>
+            {isFunded ? <p> Funded </p> : <p> Not Funded </p>}
             <p>Project address: {project.instance?.address}</p>
-            <p>Project goal: {(goal.div(oneEth)).toNumber()} ETH</p>
+            <p>Project goal: {goal.toNumber()} ETH</p>
             <p>Project's Charity: {charityName}</p>
             <p>Project description: {projectDescription}</p>
             <p>Donations until now: {currentDonatedTotal.toNumber()} ETH</p>
