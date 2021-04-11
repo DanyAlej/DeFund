@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { ProjectContext } from "./../hardhat/SymfoniContext";
 import {BigNumber} from '@ethersproject/bignumber';
+//import axios from 'axios';
 
 function Charities() {
     const project = useContext(ProjectContext);
@@ -35,17 +36,15 @@ function Charities() {
     const handleCreateProject = () => {
         const doAsync = async () => {
             //if(!project.factory) throw Error("Factory instance not ready");
-            //console.log(goal);
-            //console.log(charityName);
-            //console.log(projectDescription);
-            //setNewProject(await project.factory.deploy(goal, charityName, projectDescription));
-            //console.log(typeof(newProject?.address));
-            //if(!newProject || !project.instance) return
-            //project.instance.attach(newProject.address);
-            //console.log(project.instance.address);
+            //let tx = await project.factory.deploy(BigNumber.from(goal).mul(oneEth), charityName, projectDescription);
+            //console.log(tx.address);
+            //project.instance.attach(tx.address);
+            //axios.post('http://localhost:3002/projects', {address: tx.address})
+                //.then(res => {
+                    //console.log(res);
+                    //console.log(res.data)});
             if(!project.instance) return
             let tx = await project.instance.setProject((BigNumber.from(goal).mul(oneEth)), charityName, projectDescription)
-            //let tx = await project.instance.setProject(2000, charityName, projectDescription)
             await tx.wait();
         };
         doAsync();

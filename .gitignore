@@ -51,3 +51,5 @@ cache
 #hardhat react
 frontend/src/hardhat/deployments/hardhat
 frontend/src/hardhat/deployments/localhost
+
+db.json
