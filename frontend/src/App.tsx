@@ -8,15 +8,16 @@ import {
   Link
 } from "react-router-dom";
 import {Symfoni} from './hardhat/SymfoniContext';
+import './App.css';
 
 function App() {
     return (
         <div className="App">
             <header className="App-header">
             <Symfoni autoInit={true}>
-                <h1>DeFund: Decentralized funding platform for charities</h1>
+                <h2>DeFund: Decentralized funding platform for charities</h2>
                 <Router>
-                    <div>
+                    <div className="navibar">
                     <nav>
                     <ul>
                     <li>
@@ -28,6 +29,7 @@ function App() {
                     </ul>
                     </nav>
                     </div>
+                    <div className="rest">
                     <Switch>
                         <Route path="/charity">
                         <Charities />
@@ -36,6 +38,7 @@ function App() {
                         <Donors />
                         </Route>
                     </Switch>
+                    </div>
                 </Router>
             </Symfoni>
             </header>
