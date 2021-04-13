@@ -6,6 +6,8 @@ import { ProjectContext } from "./../hardhat/SymfoniContext";
 import { SignerContext } from "./../hardhat/SymfoniContext";
 import './Donors.css';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import ProgressBar from "@ramonak/react-progress-bar";
+
 //import axios from 'axios';
 
 function Donors() {
@@ -97,14 +99,28 @@ function Donors() {
     }
 
     const donorList = donors.map((donor, key) => 
-        <p key={key}> Donor address: {donor} </p>
+        <div className="projectAddressSection">
+        <p key={key} className="donor"> Donante {key+1}: {donor} </p>
+                    <CopyToClipboard text={donor.toString()} onCopy={() => setCopied(true)}>
+                    <button className="copyButton" aria-expanded="false" id="menu-trigger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-clipboard" viewBox="0 0 16 16">
+                          <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                          <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                        </svg>
+                    </button>
+                    </CopyToClipboard>
+        </div>
         )
 
     return (
         <div className="containerDonor">
             <div className="card">
-                {isFunded ? <p> Funded </p> :
-                <p> Not Funded </p>}
+                {isFunded ? 
+                <div>
+                    <p className="card__name" style={{marginRight: "10px"}}> Financiado! </p>
+                    <img src="https://images.vexels.com/media/users/3/143372/isolated/preview/6e633a235ea0d523078e667b9f84f15b-blue-check-mark-by-vexels.png" className="overlayImage" />
+                </div> :
+                <span />}
                 <div className="projectAddressSection">
                     <p className="card__name">{projectAddress}</p>
                     <CopyToClipboard text={projectAddress} onCopy={() => setCopied(true)}>
@@ -116,21 +132,25 @@ function Donors() {
                     </button>
                     </CopyToClipboard>
                 </div>
-                { copied ? <p> Copied! </p> : <span></span>}
+                { copied ? <p> Copiado! </p> : <span></span>}
                 <p className="card__name">{charityName}</p>
-                <p className="card__name">Project goal: {goal.toNumber()} ETH</p>
+                <p className="card__name">Meta del proyecto: {goal.toNumber()} ETH</p>
                 <p>{projectDescription}</p>
-                <p>Donations until now: {currentDonatedTotal.toNumber()} ETH</p>
-                <p>Approvals until now: {numberOfApprovals}</p>
-                <p>Number of donors until now: {numberOfDonors}</p>
+                <p>Donaciones hasta ahora: {currentDonatedTotal.toNumber()} ETH</p>
+                <ProgressBar completed={Math.round((currentDonatedTotal.toNumber()/goal.toNumber())*1000)/10} width="300px" bgColor="#36d600"/>
+                <p>Número de donantes: {numberOfDonors}</p>
+                <p>Aprovaciones: {numberOfApprovals}</p>
+                <ProgressBar completed={Math.round((numberOfApprovals/numberOfDonors)*1000)/10} width="300px" bgColor="#36d600"/>
                 {donorList}
                 <div className="form__group field">
                     <input onChange={(e) => setDonation(parseInt(e.target.value))} type="input" className="form__field" placeholder="Donation in ETH" name="name" id='name' required />
-                    <label className="form__label">Donation in ETH</label>
+                    <label className="form__label">Donaciones en ETH</label>
                 </div>
                 <br />
-                <button onClick={donate} className="btn draw-border"> Donate! </button>
-                <button onClick={approve} className="btn draw-border">  Approve! </button>
+                <button disabled={!!isFunded} onClick={donate} className="btn draw-border">Donar!</button>
+                <button disabled={!!isFunded} onClick={approve} className="btn draw-border">Aprobar!</button>
+                { isFunded ? <p> Donaciones y aprovaciones no disponibles dado a que el proyecto ya ha llegado a su meta y ha sido aprobado. </p> :
+                <span />}
             </div>
         </div>
     );

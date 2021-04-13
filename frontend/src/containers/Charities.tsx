@@ -67,20 +67,20 @@ function Charities() {
             <div className="parent">
             <div className="containerCharity">
                 <div className="cardCharity">
-                    <p className="card__name"> Follow the next steps to create the project you want to fund </p>
+                    <p className="card__name"> Sigue los siguientes pasos para crear tu proyecto </p> 
                     <div className="form__group field">
                         <input onChange={(e) => setCharityName(e.target.value)} type="input" className="form__field" placeholder="Charity Name" name="name" id='name' required />
-                        <label className="form__label">Charity Name</label>
+                        <label className="form__label">Nombre de la fundación</label>
                     </div>
                     <div className="form__group field">
                         <input onChange={(e) => setProjectDescription(e.target.value)} type="input" className="form__field" placeholder="Project Description" name="name" id='name' required />
-                        <label className="form__label">Project Description</label>
+                        <label className="form__label">Descripción del proyecto</label>
                     </div>
                     <div className="form__group field">
                         <input onChange={(e) => setGoal(parseInt(e.target.value))} type="input" className="form__field" placeholder="Goal in ETH" name="name" id='name' required />
-                        <label className="form__label">Goal in Eth</label>
+                        <label className="form__label">Meta en Eth</label>
                     </div>
-                    <button className="btn draw-border" onClick={handleCreateProject}>Create project!</button>
+                    <button className="btn draw-border" onClick={handleCreateProject}>Crear proyecto!</button>
                 </div>
             </div>
             </div>

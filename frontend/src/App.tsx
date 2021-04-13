@@ -14,17 +14,18 @@ function App() {
     return (
         <div className="App">
             <header className="App-header">
+            </header>
             <Symfoni autoInit={true}>
-                <h2>DeFund: Decentralized funding platform for charities</h2>
                 <Router>
                     <div className="navibar">
+                    <p className="card__name" style={{marginTop:"20px", marginLeft:"15px"}}>DeFund: Plataforma decentralizada de financiación de fundaciones </p>
                     <nav>
                     <ul>
                     <li>
-                        <Link to="/charity">[For Charities] Create a new Project</Link>
+                        <Link to="/charity" style={{textDecoration: 'none', color: 'white' }}>[Para fundaciones] Crear un nuevo proyecto</Link>
                     </li>
                     <li>
-                        <Link to="/donor">[For Donors] Find a Project to Contribute</Link>
+                        <Link to="/donor" style={{textDecoration: 'none', color: 'white'}}>[Para Donantes] Contribuye a un proyecto</Link>
                     </li>
                     </ul>
                     </nav>
@@ -41,7 +42,6 @@ function App() {
                     </div>
                 </Router>
             </Symfoni>
-            </header>
         </div>
   );
 }
