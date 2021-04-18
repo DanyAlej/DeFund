@@ -19,7 +19,9 @@ function Donors() {
  
     const [projectAddress, setProjectAddress] = useState<string>("");
     const [charityName, setCharityName] = useState("");
+    const [charityAddress, setCharityAddress] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
+    const [update, setUpdate] = useState("");
     const [goal, setGoal] = useState<BigNumber>(BigNumber.from('0'));
     const [currentDonatedTotal, setCurrentDonatedTotal] = useState<BigNumber>(BigNumber.from('0'));
     const [numberOfApprovals, setNumberOfApprovals] = useState(0);
@@ -56,6 +58,7 @@ function Donors() {
                 setProjectAddress(project.instance.address)
                 setGoal((await project.instance.goal()).div(oneEth));
                 setProjectDescription(await project.instance.description());
+                setUpdate(await project.instance.update());
                 let totalDonatedNow = await project.instance.totalDonated();
                 if (totalDonatedNow.eq(BigNumber.from(0))) {
                     setCurrentDonatedTotal(BigNumber.from(0));
@@ -64,6 +67,7 @@ function Donors() {
                     setCurrentDonatedTotal((await project.instance.totalDonated()).div(oneEth));
                 }
                 setCharityName(await project.instance.charityName());
+                setCharityAddress(await project.instance.charityAddress());
                 setNumberOfApprovals((await project.instance.numberOfApprovals()).toNumber());
                 setNumberOfDonors((await project.instance.getNumberOfDonors()).toNumber());
                 setIsFunded(await project.instance.isFunded());
@@ -134,8 +138,21 @@ function Donors() {
                 </div>
                 { copied ? <p> Copiado! </p> : <span></span>}
                 <p className="card__name">{charityName}</p>
+                <p className="card__name">Direccion de la fundación:</p>
+                <div className="projectAddressSection">
+                    <p className="card__name">{charityAddress}</p>
+                    <CopyToClipboard text={charityAddress} onCopy={() => setCopied(true)}>
+                    <button className="copyButton" aria-expanded="false" id="menu-trigger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-clipboard" viewBox="0 0 16 16">
+                          <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                          <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                        </svg>
+                    </button>
+                    </CopyToClipboard>
+                </div>
                 <p className="card__name">Meta del proyecto: {goal.toNumber()} ETH</p>
                 <p>{projectDescription}</p>
+                <p>Actualizaciones: {update}</p>
                 <p>Donaciones hasta ahora: {currentDonatedTotal.toNumber()} ETH</p>
                 <ProgressBar completed={Math.round((currentDonatedTotal.toNumber()/goal.toNumber())*1000)/10} width="300px" bgColor="#36d600"/>
                 <p>Número de donantes: {numberOfDonors}</p>

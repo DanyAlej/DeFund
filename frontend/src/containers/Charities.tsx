@@ -12,6 +12,7 @@ function Charities() {
     const [charityName, setCharityName] = useState("");
     const [projectDescription, setProjectDescription] = useState("");
     const [goal, setGoal] = useState(0);
+    const [update, setUpdate] = useState("");
     const oneEth = BigNumber.from("1000000000000000000");
 
     //const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
@@ -50,6 +51,16 @@ function Charities() {
         doAsync();
     }
 
+    const handleUpdate = () => {
+        const doAsync = async () => {
+            if(!project.instance) return
+            let tx = await project.instance.setUpdate(update);
+            await tx.wait();
+        };
+        doAsync();
+    }
+    
+
     useEffect(() => {
         const doAsync = async () => {
             if (!project.instance) {
@@ -80,7 +91,12 @@ function Charities() {
                         <input onChange={(e) => setGoal(parseInt(e.target.value))} type="input" className="form__field" placeholder="Goal in ETH" name="name" id='name' required />
                         <label className="form__label">Meta en Eth</label>
                     </div>
+                    <div className="form__group field">
+                        <input onChange={(e) => setUpdate(e.target.value)} type="input" className="form__field" placeholder="Goal in ETH" name="name" id='name' required />
+                        <label className="form__label">Actualización</label>
+                    </div>
                     <button className="btn draw-border" onClick={handleCreateProject}>Crear proyecto!</button>
+                    <button className="btn draw-border" onClick={handleUpdate}>Actualizar proyecto!</button>
                 </div>
             </div>
             </div>

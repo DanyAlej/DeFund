@@ -6,6 +6,7 @@ contract Project {
 
     string public charityName;
     string public description;
+    string public update;
 
     //How much the project want's to raise
     uint public goal;
@@ -47,6 +48,10 @@ contract Project {
         goal = _goal;
         charityName = _charityName;
         description = _description;
+    }
+
+    function setUpdate(string memory _update) public {
+        update = _update;
     }
 
     function donate() payable external {
