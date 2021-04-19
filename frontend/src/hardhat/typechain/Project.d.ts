@@ -34,6 +34,7 @@ interface ProjectInterface extends ethers.utils.Interface {
     "donators(uint256)": FunctionFragment;
     "getNumberOfDonors()": FunctionFragment;
     "goal()": FunctionFragment;
+    "isClosed()": FunctionFragment;
     "isFunded()": FunctionFragment;
     "numberOfApprovals()": FunctionFragment;
     "setProject(uint256,string,string)": FunctionFragment;
@@ -75,6 +76,7 @@ interface ProjectInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "goal", values?: undefined): string;
+  encodeFunctionData(functionFragment: "isClosed", values?: undefined): string;
   encodeFunctionData(functionFragment: "isFunded", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "numberOfApprovals",
@@ -121,6 +123,7 @@ interface ProjectInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "goal", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "isClosed", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isFunded", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "numberOfApprovals",
@@ -246,6 +249,10 @@ export class Project extends Contract {
 
     "goal()"(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    isClosed(overrides?: CallOverrides): Promise<[boolean]>;
+
+    "isClosed()"(overrides?: CallOverrides): Promise<[boolean]>;
+
     isFunded(overrides?: CallOverrides): Promise<[boolean]>;
 
     "isFunded()"(overrides?: CallOverrides): Promise<[boolean]>;
@@ -352,6 +359,10 @@ export class Project extends Contract {
 
   "goal()"(overrides?: CallOverrides): Promise<BigNumber>;
 
+  isClosed(overrides?: CallOverrides): Promise<boolean>;
+
+  "isClosed()"(overrides?: CallOverrides): Promise<boolean>;
+
   isFunded(overrides?: CallOverrides): Promise<boolean>;
 
   "isFunded()"(overrides?: CallOverrides): Promise<boolean>;
@@ -449,6 +460,10 @@ export class Project extends Contract {
     goal(overrides?: CallOverrides): Promise<BigNumber>;
 
     "goal()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    isClosed(overrides?: CallOverrides): Promise<boolean>;
+
+    "isClosed()"(overrides?: CallOverrides): Promise<boolean>;
 
     isFunded(overrides?: CallOverrides): Promise<boolean>;
 
@@ -555,6 +570,10 @@ export class Project extends Contract {
     goal(overrides?: CallOverrides): Promise<BigNumber>;
 
     "goal()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    isClosed(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "isClosed()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     isFunded(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -677,6 +696,10 @@ export class Project extends Contract {
     goal(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "goal()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    isClosed(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "isClosed()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     isFunded(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

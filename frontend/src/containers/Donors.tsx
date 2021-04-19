@@ -29,6 +29,7 @@ function Donors() {
     const [donation, setDonation] = useState(0);
     const [donors, setDonors] = useState<String[]>([]);
     const [isFunded, setIsFunded] = useState<Boolean>(false);
+    const [isClosed, setIsClosed] = useState<Boolean>(false);
     
     //Non-functional Aesthetics only
     const [copied, setCopied] = useState<boolean>(false);
@@ -71,6 +72,7 @@ function Donors() {
                 setNumberOfApprovals((await project.instance.numberOfApprovals()).toNumber());
                 setNumberOfDonors((await project.instance.getNumberOfDonors()).toNumber());
                 setIsFunded(await project.instance.isFunded());
+                setIsClosed(await project.instance.isClosed());
                 console.log(await project.instance.balanceOfProject());
                 let newDonor: String;
                 let i;
@@ -121,7 +123,13 @@ function Donors() {
             <div className="card">
                 {isFunded ? 
                 <div>
-                    <p className="card__name" style={{marginRight: "10px"}}> Financiado! </p>
+                    <p className="card__name" style={{marginRight: "10px"}}> Financiado! 50% de los recursos entregados </p>
+                    <img src="https://images.vexels.com/media/users/3/143372/isolated/preview/6e633a235ea0d523078e667b9f84f15b-blue-check-mark-by-vexels.png" className="overlayImage" />
+                </div> :
+                <span />}
+                {isClosed ? 
+                <div>
+                    <p className="card__name" style={{marginRight: "10px"}}> Aprovado! 100% de los recursos entregados </p>
                     <img src="https://images.vexels.com/media/users/3/143372/isolated/preview/6e633a235ea0d523078e667b9f84f15b-blue-check-mark-by-vexels.png" className="overlayImage" />
                 </div> :
                 <span />}
@@ -165,8 +173,10 @@ function Donors() {
                 </div>
                 <br />
                 <button disabled={!!isFunded} onClick={donate} className="btn draw-border">Donar!</button>
-                <button disabled={!!isFunded} onClick={approve} className="btn draw-border">Aprobar!</button>
-                { isFunded ? <p> Donaciones y aprovaciones no disponibles dado a que el proyecto ya ha llegado a su meta y ha sido aprobado. </p> :
+                <button disabled={!!isClosed} onClick={approve} className="btn draw-border">Aprobar!</button>
+                { isFunded ? <p> Donaciones no disponibles dado a que el proyecto ya ha llegado a su meta.</p> :
+                <span />}
+                { isClosed ? <p> Aprovaciones no disponibles dado a que el proyecto ya ha cerrado.</p> :
                 <span />}
             </div>
         </div>

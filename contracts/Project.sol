@@ -22,6 +22,7 @@ contract Project {
     uint public currentAmount;
 
     bool public isFunded;
+    bool public isClosed;
 
     modifier onlyDonor() {
         bool isDonor = false; 
@@ -64,7 +65,10 @@ contract Project {
         donators.push(msg.sender);
 
         currentAmount += msg.value;
-
+        if(currentAmount >= goal) {
+            console.log("Releasing first 50% funds");
+            releaseFunds();
+        }
     }
 
     function totalDonated() external view returns (uint256) {
@@ -88,14 +92,17 @@ contract Project {
 
         console.log("Approved, release?");
         //once the project has achieved the goal AND  everyone has approved funds will be released to the charity
-        if(currentAmount >= goal && numberOfApprovals == donators.length) {
-            console.log("Releasing funds conditions met");
+        if(numberOfApprovals == donators.length) {
+            console.log("Releasing next 50% funds everyone has approved");
             releaseFunds();
         }
     }
 
     function releaseFunds() private {
-        charityAddress.transfer(currentAmount);
+        charityAddress.transfer(currentAmount/2);
+        if(isFunded){
+            isClosed = true;
+        }
         isFunded = true;
     }
 }
