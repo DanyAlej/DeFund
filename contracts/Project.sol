@@ -84,14 +84,14 @@ contract Project {
     }
 
     function approve() public onlyDonor {
-        //donor only approves once, only approves the project
+        //donador solo puede aprobar una vez
         if(!approvals[msg.sender]){
             approvals[msg.sender] = true;
             numberOfApprovals += 1;
         }
 
         console.log("Approved, release?");
-        //once the project has achieved the goal AND  everyone has approved funds will be released to the charity
+        //Una vez el proyecto ha sido aprobado por todos los donantes se liberan el resto de los fondos.
         if(numberOfApprovals == donators.length) {
             console.log("Releasing next 50% funds everyone has approved");
             releaseFunds();

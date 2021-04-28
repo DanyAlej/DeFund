@@ -129,7 +129,7 @@ function Donors() {
                 <span />}
                 {isClosed ? 
                 <div>
-                    <p className="card__name" style={{marginRight: "10px"}}> Aprovado! 100% de los recursos entregados </p>
+                    <p className="card__name" style={{marginRight: "10px"}}> Aprobado! 100% de los recursos entregados </p>
                     <img src="https://images.vexels.com/media/users/3/143372/isolated/preview/6e633a235ea0d523078e667b9f84f15b-blue-check-mark-by-vexels.png" className="overlayImage" />
                 </div> :
                 <span />}
