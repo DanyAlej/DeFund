@@ -40,10 +40,10 @@ describe('Project contract', function () {
 
     describe("Donations", function () {
         it("Should transfer tokens to the smart contract", async function () {
-            await hardhatProject.connect(donor1).donate({from: donor1.getAddress(), value: 900});
-            donorBalance = await donor1.getBalance();
-            expect(await hardhatProject.totalDonated()).to.equal(900);
+            expect(await hardhatProject.connect(donor1).donate({from: donor1.getAddress(), value: 900}));
+            var numDonors = await hardhatProject.getNumberOfDonors()
             expect(await hardhatProject.getNumberOfDonors()).to.equal(1); 
+            expect(await hardhatProject.totalDonated()).to.equal(900);
         });
 
         it("Two donations will be made", async function () {
@@ -95,7 +95,6 @@ describe('Project contract', function () {
             expect(await hardhatProject.numberOfApprovals()).to.equal(2);
             let charityBalanceAfter = await charity.getBalance();
 
-            console.log(charityBalanceBefore.eq(charityBalanceAfter));
             expect((charityBalanceAfter.sub(charityBalanceBefore)).toNumber()).to.equal(0);
 
         });
@@ -114,26 +113,35 @@ describe('Project contract', function () {
         });
 
 
-        it("Gets to target and releases funds", async function () {
+        it("Gets to target and releases half the funds", async function () {
             expect(await hardhatProject.totalDonated()).to.equal(0);
+            let charityBalanceBefore = await charity.getBalance();
             await hardhatProject.connect(donor1).donate({from: donor1.getAddress(), value: 1900});
             await hardhatProject.connect(donor2).donate({from: donor2.getAddress(), value: 500});
 
             //donor 2 is going to approve the release of funds and donor 1 isn't
             await hardhatProject.connect(donor1).approve();
-            let charityBalanceBefore = await charity.getBalance();
-            console.log(charityBalanceBefore);
-            await hardhatProject.connect(donor2).approve();
 
-            expect(await hardhatProject.numberOfApprovals()).to.equal(2);
+            expect(await hardhatProject.numberOfApprovals()).to.equal(1);
             let charityBalanceAfter = await charity.getBalance();
-            console.log(charityBalanceAfter);
 
 
-            console.log(charityBalanceBefore.eq(charityBalanceAfter));
-            expect((charityBalanceAfter.sub(charityBalanceBefore)).toNumber()).to.equal(2400);
+            expect((charityBalanceAfter.sub(charityBalanceBefore)).toNumber()).to.equal(1200);
         });
 
+        it("Gets to target, everyone approves AND release all the funds ", async function () {
+            expect(await hardhatProject.totalDonated()).to.equal(0);
+            let charityBalanceBefore = await charity.getBalance();
+            await hardhatProject.connect(donor1).donate({from: donor1.getAddress(), value: 1900});
+            await hardhatProject.connect(donor2).donate({from: donor2.getAddress(), value: 500});
+
+            await hardhatProject.connect(donor1).approve();
+            await hardhatProject.connect(donor2).approve();
+            let charityBalanceAfter = await charity.getBalance();
+
+            expect(await hardhatProject.numberOfApprovals()).to.equal(2);
+            expect((charityBalanceAfter.sub(charityBalanceBefore)).toNumber()).to.equal(2400);
+        });
 
 
     });

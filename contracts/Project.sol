@@ -90,9 +90,8 @@ contract Project {
             numberOfApprovals += 1;
         }
 
-        console.log("Approved, release?");
         //Una vez el proyecto ha sido aprobado por todos los donantes se liberan el resto de los fondos.
-        if(numberOfApprovals == donators.length) {
+        if(isFunded && numberOfApprovals == donators.length) {
             console.log("Releasing next 50% funds everyone has approved");
             releaseFunds();
         }
