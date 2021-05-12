@@ -65,6 +65,8 @@ Grabe el siguiente demo de la aplicación para mostrar su funcionamiento.
 
 Comente las siguientes líneas en el archivo hardhat.config.ts
 
+![image](https://raw.githubusercontent.com/DanyAlej/DeFund/master/images/testMiningOff.png)
+
 Ejecute el siguiente comando
 
 ```bash
